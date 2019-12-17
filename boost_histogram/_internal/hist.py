@@ -184,11 +184,10 @@ class BaseHistogram(object):
         ----------
         *args : Union[Array[float], Array[int], Array[str], float, int, str]
             Provide one value or array per dimension.
-        weight : List[Union[Array[float], Array[int], Array[str], float, int, str]]]
-            Provide weights (only if the histogram storage supports it)
-        sample : List[Union[Array[float], Array[int], Array[str], float, int, str]]]
+        weight : List[Union[Array[float], Array[int], float, int]]]
+            Provide weights (float only if the histogram storage supports it)
+        sample : List[Union[Array[float], float]]]
             Provide samples (only if the histogram storage supports it)
-
         """
 
         self._hist.fill(*args, **kwargs)
