@@ -136,12 +136,25 @@ class BaseHistogram(object):
         return self.view(False)
 
     def __add__(self, other):
-        return self.__class__(self._hist.__add__(other._hist))
+        if hasattr(other, "_hist"):
+            return self.__class__(self._hist.__add__(other._hist))
+        else:
+            retval = self.copy()
+            retval += other
+            return retval
 
     def __iadd__(self, other):
-        self._hist.__iadd__(other._hist)
-        self.axes = AxesTuple(self._axis(i) for i in range(self.rank))
-        return self
+        if not other:
+            return self
+        if hasattr(other, "_hist"):
+            self._hist.__iadd__(other._hist)
+            # Addition may change category axes
+            self.axes = AxesTuple(self._axis(i) for i in range(self.rank))
+            return self
+        return NotImplemented
+
+    def __radd__(self, other):
+        return self + other
 
     def __eq__(self, other):
         return self._hist == other._hist
